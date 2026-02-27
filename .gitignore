@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+venv/
+env/
+.venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project-specific (keep structure via .gitkeep)
+reference_photos/person1/*
+reference_photos/person2/*
+!reference_photos/person1/.gitkeep
+!reference_photos/person2/.gitkeep
+
+models/*
+!models/.gitkeep
+
+captures/*
+!captures/.gitkeep

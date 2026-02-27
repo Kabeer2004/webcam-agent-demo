@@ -30,7 +30,7 @@ class TakePhoto(BaseTool):
     def call(self, params: str, **kwargs) -> str:
         os.makedirs(config.CAPTURES_DIR, exist_ok=True)
 
-        cap = cv2.VideoCapture(0)
+        cap = cv2.VideoCapture(config.WEBCAM_INDEX)
         if not cap.isOpened():
             return json.dumps({"error": "Could not open webcam."})
 

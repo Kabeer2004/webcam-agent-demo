@@ -24,7 +24,7 @@ PERSONS = {
 # Friendly display names
 PERSON_NAMES = {
     0: "Kabeer",
-    1: "Friend",
+    1: "Sarthak",
 }
 
 # Fun facts the agent will use in personalised greetings
@@ -35,9 +35,9 @@ PERSON_FACTS = {
         "Kabeer is a big fan of open-source LLMs.",
     ],
     1: [
-        "Friend is an awesome collaborator who helps demo cool projects.",
-        "Friend is always up for brainstorming creative ideas.",
-        "Friend has great taste in music.",
+        "Sarthak is an awesome collaborator who helps demo cool projects.",
+        "Sarthak is always up for brainstorming creative ideas.",
+        "Sarthak has great taste in music.",
     ],
 }
 
@@ -50,3 +50,7 @@ LLM_API_KEY = "EMPTY"  # Ollama doesn't need a real key
 # LBPH confidence threshold – lower is a better match.
 # Predictions above this threshold will be labelled "unknown".
 CONFIDENCE_THRESHOLD = 80
+
+# ── Hardware settings ────────────────────────────────────────────────
+# Usually 0 for built-in, 1 or 2 for external USB webcams.
+WEBCAM_INDEX = 0

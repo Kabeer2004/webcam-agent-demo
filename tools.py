@@ -96,7 +96,13 @@ class RecogniseFace(BaseTool):
             )
 
         # Load model and labels
-        recogniser = cv2.face.LBPHFaceRecognizer_create()
+        try:
+            recogniser = cv2.face.LBPHFaceRecognizer_create()
+        except AttributeError:
+            return json.dumps({
+                "error": "OpenCV 'face' module not found. Please run: pip uninstall opencv-python opencv-contrib-python -y && pip install opencv-contrib-python"
+            })
+        
         recogniser.read(config.FACE_MODEL_PATH)
 
         with open(config.LABELS_PATH, "r") as f:
@@ -125,6 +131,8 @@ class RecogniseFace(BaseTool):
             )
 
         results = []
+        display_img = img.copy()  # Copy for display with annotations
+
         for x, y, w, h in detected:
             face_roi = gray[y : y + h, x : x + w]
             face_roi = cv2.resize(face_roi, (200, 200))
@@ -136,9 +144,46 @@ class RecogniseFace(BaseTool):
                     {"name": name, "confidence": round(confidence, 2)}
                 )
             else:
+                name = "unknown"
                 results.append(
                     {"name": "unknown", "confidence": round(confidence, 2)}
                 )
+
+            # Draw bounding box and label on the display image
+            color = (0, 255, 0) if name != "unknown" else (0, 0, 255)
+            cv2.rectangle(display_img, (x, y), (x + w, y + h), color, 3)
+
+            label_text = f"{name} ({confidence:.1f})"
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            font_scale = 0.9
+            thickness = 2
+            (text_w, text_h), baseline = cv2.getTextSize(label_text, font, font_scale, thickness)
+
+            # Draw label background
+            cv2.rectangle(
+                display_img,
+                (x, y - text_h - baseline - 10),
+                (x + text_w + 8, y),
+                color,
+                cv2.FILLED,
+            )
+            cv2.putText(
+                display_img,
+                label_text,
+                (x + 4, y - baseline - 5),
+                font,
+                font_scale,
+                (255, 255, 255),
+                thickness,
+            )
+
+        # Show the annotated image in a popup window
+        window_name = "Face Recognition Result"
+        cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+        cv2.resizeWindow(window_name, 800, 600)
+        cv2.imshow(window_name, display_img)
+        cv2.waitKey(5000)  # Show for 5 seconds
+        cv2.destroyWindow(window_name)
 
         recognised_names = [r["name"] for r in results if r["name"] != "unknown"]
         if recognised_names:
